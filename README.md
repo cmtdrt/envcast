@@ -7,7 +7,7 @@ Requires **Go 1.26** or later.
 ## Install
 
 ```bash
-go get github.com/cdrouet/envcast/pkg/envcast
+go get github.com/cdrouet/envcast
 ```
 
 ## Usage
@@ -16,7 +16,7 @@ go get github.com/cdrouet/envcast/pkg/envcast
 import (
     "time"
 
-    "github.com/cdrouet/envcast/pkg/envcast"
+    "github.com/cdrouet/envcast"
 )
 
 func main() {
