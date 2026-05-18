@@ -20,6 +20,9 @@ import (
 )
 
 func main() {
+    // Load .env into the process environment (optional, for local dev)
+    _ = envcast.Load()
+
     // Strict: panic if missing or invalid
     port := envcast.Int("PORT")
     debug := envcast.Bool("DEBUG")
@@ -34,6 +37,18 @@ func main() {
 }
 ```
 
+## Loading `.env` files
+
+```go
+err := envcast.Load()                    // default: .env
+err := envcast.Load(".env", ".env.local") // multiple files, first key wins
+envcast.MustLoad()
+
+envcast.Overload(".env") // overwrites existing environment variables
+```
+
+`Load` never overwrites variables already set in the environment (same idea as godotenv). Use `Overload` to force values from the file.
+
 ## Behavior
 
 | Situation              | Strict (`Int`, `Bool`, …) | With fallback (`IntOr`, …) |
@@ -47,15 +62,3 @@ Panic messages are explicit, e.g. `envcast: missing required env var PORT` or `e
 
 `string`, `int`, `int64`, `float64`, `bool`, `time.Duration`, `[]string` (CSV or custom separator).
 
-Generic helper: `envcast.Get[int]("WORKERS")`.
-
-## Development
-
-```bash
-go test ./...
-go test -cover ./...
-```
-
-## License
-
-MIT — see [LICENSE](LICENSE).
