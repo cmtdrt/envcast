@@ -83,6 +83,34 @@ func TestIntOr(t *testing.T) {
 	})
 }
 
+func TestIntDefault(t *testing.T) {
+	if got := envcast.IntDefault("ENVCAST_INT_DEFAULT_ABSENT", 8080); got != 8080 {
+		t.Fatalf("IntDefault() = %d, want 8080", got)
+	}
+	t.Setenv("ENVCAST_INT_DEFAULT", "3000")
+	if got := envcast.IntDefault("ENVCAST_INT_DEFAULT", 8080); got != 3000 {
+		t.Fatalf("IntDefault() = %d, want 3000", got)
+	}
+	t.Setenv("ENVCAST_INT_DEFAULT_BAD", "nope")
+	if got := envcast.IntDefault("ENVCAST_INT_DEFAULT_BAD", 8080); got != 8080 {
+		t.Fatalf("IntDefault() = %d, want 8080 on invalid", got)
+	}
+}
+
+func TestBoolDefault(t *testing.T) {
+	t.Setenv("ENVCAST_BOOL_DEFAULT_BAD", "not-a-bool")
+	if got := envcast.BoolDefault("ENVCAST_BOOL_DEFAULT_BAD", false); got {
+		t.Fatal("BoolDefault() = true, want false on invalid")
+	}
+}
+
+func TestGetDefault(t *testing.T) {
+	t.Setenv("ENVCAST_GET_DEFAULT_BAD", "x")
+	if got := envcast.GetDefault("ENVCAST_GET_DEFAULT_BAD", 42); got != 42 {
+		t.Fatalf("GetDefault[int]() = %d, want 42", got)
+	}
+}
+
 func TestInt64(t *testing.T) {
 	t.Setenv("ENVCAST_INT64", "9223372036854775807")
 	if got := envcast.Int64("ENVCAST_INT64"); got != 9223372036854775807 {
